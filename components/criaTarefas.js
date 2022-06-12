@@ -1,50 +1,55 @@
-import BotaoConclui from "./components/concluiTarefea.js";
-import BotaoDeleta from "./components/deletaTarefa.js";
-
-let tarefas = [];
+import { carregaTarefa } from "./carregaTarefa.js";
+import BotaoConclui from "./concluiTarefa.js";
+import BotaoDeleta from "./deletaTarefa.js";
 
 //A função handleNovoItem() trabalha apenas com dados
-const handleNovoItem = (evento) => {
+export const handleNovoItem = (evento) => {
   evento.preventDefault()
 
-  const lista = document.querySelector('[data-list]');
+  /*
+  O argumento 'tarefas' é a chave do item que queremos pegar
+  JSON.parse transforma string em objeto
+  ||[] indica que se não houver algum dado, é iniciado um array vazio
+  */
+  const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+
+  
   const input = document.querySelector('[data-form-input]');
   const valor = input.value;
   
 
-  /* Capturando o input na DOM */
+  /* Capturando o input de data na DOM */
   const calendario = document.querySelector('[data-form-date]');
-  /* Capturando o conteúdo do input com a biblioteca moment */
+  /* Capturando o conteúdo do input usando a biblioteca moment */
   const data = moment(calendario.value);
   /* Alterando o formato do conteúdo do input */
   const dataFormatada = data.format('DD/MM/YYYY');
   
-  //Armazena os parametros para a função criarTarefa()
+  //Armazena os parametros para a função criarTarefa() em um Objeto
   const dados = {
     valor,
     dataFormatada
   }
 
-  //Armazena a execução da função criarTarefa()
-  const criaTarefa = criarTarefa(dados)
+  //Criando o Array que será iterado no localStorage
+  //pega dados do localStorage 'tarefas' e insere 'dados' no localStorage
+  const tarefasAtualizadas = [...tarefas, dados];
 
   
-  tarefas.push(dados);
+  //Atualiza o localStorage
+  localStorage.setItem("tarefas", JSON.stringify(tarefasAtualizadas));
 
-  localStorage.setItem('tarefas', JSON.stringify(tarefas));
 
-
-  //Adiciona o resultado de criaTarefa como elemento filho de lista que foi percorrida na DOM
-  lista.appendChild(criaTarefa);
   //Após execução o input volta ao valor padrão
   input.value = "";
-  
+
   carregaTarefa();
+
 }
 
 
 //A função criarTarefa() trabalha com a exibição dos dados de handleNovoItem()
-const criarTarefa = ({ valor, dataFormatada }) => {
+export const Tarefa = ({ valor, dataFormatada }) => {
   
   
   const tarefa = document.createElement('li')
@@ -59,5 +64,3 @@ const criarTarefa = ({ valor, dataFormatada }) => {
 
   return tarefa;
 }
-
-export default handleNovoItem;
