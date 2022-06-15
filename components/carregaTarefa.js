@@ -1,4 +1,5 @@
-import { Tarefa } from "./criaTarefas.js";
+import { ordenaDatas, removeDatasRepetidas } from "../service/data.js";
+import { criaData } from "./criaData.js";
 
 export const carregaTarefa = () => {
   
@@ -11,10 +12,15 @@ export const carregaTarefa = () => {
   //Limpando a lista no HTML para que não seja duplicada
   lista.innerHTML = " ";
 
+  const datasUnicas = removeDatasRepetidas(tarefasCadastradas)
+
+  ordenaDatas(datasUnicas)
   //para cada item do Array localStorage tarefa será executada a seguinte função
-  tarefasCadastradas.forEach((tarefa) => {
-    lista.appendChild(Tarefa(tarefa))
-  });
+  datasUnicas.forEach((dia) => {
+        
+    lista.appendChild(criaData(dia));
+
+  })
 
   
 }
