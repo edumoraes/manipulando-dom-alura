@@ -22,13 +22,19 @@ export const handleNovoItem = (evento) => {
   const calendario = document.querySelector('[data-form-date]');
   /* Capturando o conteúdo do input usando a biblioteca moment */
   const data = moment(calendario.value);
+
+  const horario = data.format('HH:mm')
   /* Alterando o formato do conteúdo do input */
   const dataFormatada = data.format('DD/MM/YYYY');
   
+  const concluida = false
+
   //Armazena os parametros para a função criarTarefa() em um Objeto
   const dados = {
     valor,
-    dataFormatada
+    dataFormatada,
+    horario,
+    concluida
   }
 
   //Criando o Array que será iterado no localStorage
@@ -49,18 +55,25 @@ export const handleNovoItem = (evento) => {
 
 
 //A função criarTarefa() trabalha com a exibição dos dados de handleNovoItem()
-export const Tarefa = ({ valor, dataFormatada }) => {
+export const Tarefa = ({ valor, horario, concluida }, id) => {
   
   
   const tarefa = document.createElement('li')
-  tarefa.classList.add('task');
   //isso é uma template string
-  const conteudo = `<p class="content">${dataFormatada} * ${valor}</p>`;
+  const conteudo = `<p class="content">${horario} * ${valor}</p>`;
+  
+  if(concluida) {
+    tarefa.classList.add('done');
+
+  }
+
+  tarefa.classList.add('task');
   
   tarefa.innerHTML = conteudo;
+
   
-  tarefa.appendChild(BotaoConclui());
-  tarefa.appendChild(BotaoDeleta());
+  tarefa.appendChild(BotaoConclui(carregaTarefa, id));
+  tarefa.appendChild(BotaoDeleta(carregaTarefa, id));
 
   return tarefa;
 }

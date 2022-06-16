@@ -14,12 +14,12 @@ export const criaData = (data) => {
   dataTopo.innerHTML = conteudo;
 
   //Função que adiciona o conteúdo de cada item do Array
-  tarefas.forEach((tarefa) => {
+  tarefas.forEach((tarefa, id) => {
     const dia = moment(tarefa.dataFormatada, 'DD/MM/YYYY'); //Não entendi essa sintaxe
     const diff = dataMoment.diff(dia);
 
     if(diff === 0) {
-      dataTopo.appendChild(Tarefa(tarefa))
+      dataTopo.appendChild(Tarefa(tarefa, id))
     }
 
   })
